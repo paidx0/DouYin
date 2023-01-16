@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package="./;";
+package favorite;
+
+service favoriteRpc {
+  // 赞操作
+  rpc favoriteAction (favoriteActionReq) returns (favoriteActionResp);
+  // 喜欢列表
+  rpc favoriteList (favoriteListReq) returns (favoriteListResp);
+}
+
+message favoriteActionReq {
+  string Token = 1;     // 鉴权token
+  int64 VideoID = 2;    // 视频ID
+  int32 ActionType = 3; // 1-点赞，2-取消点赞
+}
+message favoriteActionResp {
+  int32 StatusCode = 1; // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2; // 返回状态描述
+}
+
+message  favoriteListReq {
+  int64 UserID = 1;   // 用户ID
+  string  Token = 2;  // 鉴权token
+}
+message favoriteListResp {
+  int32 StatusCode = 1;           // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;           // 返回状态描述
+  repeated Video VideoList = 3;   // 视频列表
+}
+
+message Video  {
+  int64   ID = 1;             // 视频唯一标识
+  User    Author = 2;         // 视频作者信息
+  string  PlayUrl = 3;        // 视频播放地址
+  string  CoverUrl = 4;       // 视频封面地址
+  int64   FavoriteCount = 5;  // 视频的点赞总数
+  int64   CommentCount = 6;   // 视频的评论总数
+  bool    IsFavorite = 7;     // true-已点赞，false-未点赞
+  string  Title = 8;          // 视频标题
+}
+
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}

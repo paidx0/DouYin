@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package="./;";
+package feed;
+
+service feedRpc {
+  rpc  feed(FeedReq) returns (FeedResp);
+}
+
+message FeedReq  {
+  optional int64  LatestTime = 1 ; // 可选参数，限制返回视频的最新投稿时间戳
+  optional string    Token = 2;    // 可选参数，登录用户设置
+}
+message FeedResp  {
+  int32 StatusCode = 1;             // 状态码，0-成功，其他值-失败
+  string   StatusMsg = 2;           // 返回状态描述
+  repeated Video  VideoList = 3;    // 视频列表
+  optional int64    NextTime = 4;   // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+}
+
+message Video  {
+  int64   ID = 1;             // 视频唯一标识
+  User    Author = 2;         // 视频作者信息
+  string  PlayUrl = 3;        // 视频播放地址
+  string  CoverUrl = 4;       // 视频封面地址
+  int64   FavoriteCount = 5;  // 视频的点赞总数
+  int64   CommentCount = 6;   // 视频的评论总数
+  bool    IsFavorite = 7;     // true-已点赞，false-未点赞
+  string  Title = 8;          // 视频标题
+}
+
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}

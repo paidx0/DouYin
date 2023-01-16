@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package="./;";
+package user;
+
+service userRpc {
+  // 用户注册接口
+  rpc register (Req) returns (Resp);
+  // 用户登录接口
+  rpc login (Req) returns (Resp);
+  // 用户信息
+  rpc userinfo (userInfoReq) returns (userInfoResp);
+}
+
+message  Req {
+  string  Username = 1;  // 用户名，最长32个字符
+  string   Password = 2; // 密码，最长32个字符
+}
+message Resp {
+  int64 UserID = 1;      // 用户id
+  string Token = 2;      // 用户鉴权token
+}
+
+message  userInfoReq {
+  int64  UserId = 1;     // 用户ID
+  string  Token = 2;     // 鉴权token
+}
+message userInfoResp {
+  User   UserInfo = 1;    // 用户信息
+}
+
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}

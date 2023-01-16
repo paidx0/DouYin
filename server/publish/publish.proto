@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option go_package="./;";
+package publish;
+
+service publishRpc {
+  // 视频投稿
+  rpc publishAction (publishActionReq) returns (publishActionResp);
+  // 发布列表
+  rpc publishList (publishListReq) returns (publishListResp);
+}
+
+message  publishActionReq {
+  string Token = 1;       // 鉴权token
+  bytes  Data = 2;        // 视频数据
+  string Title = 3;       // 视频标题
+}
+message publishActionResp {
+  int32 StatusCode = 1;  // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;  // 返回状态描述
+}
+
+message   publishListReq {
+  int64  UserID = 1;    // 用户ID
+  string  Token = 2;    // 鉴权token
+}
+message publishListResp {
+  int32 StatusCode = 1;   // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;   // 返回状态描述
+  Video VideoList = 3;    // 视频列表
+}
+
+message Video  {
+  int64   ID = 1;             // 视频唯一标识
+  User    Author = 2;         // 视频作者信息
+  string  PlayUrl = 3;        // 视频播放地址
+  string  CoverUrl = 4;       // 视频封面地址
+  int64   FavoriteCount = 5;  // 视频的点赞总数
+  int64   CommentCount = 6;   // 视频的评论总数
+  bool    IsFavorite = 7;     // true-已点赞，false-未点赞
+  string  Title = 8;          // 视频标题
+}
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}

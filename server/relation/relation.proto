@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option go_package="./;";
+package relation;
+
+service relationRpc {
+  // 关注和取消操作
+  rpc relationAction (ActionReq) returns (ActionResp);
+  // 用户关注列表
+  rpc followList (ListReq) returns (ListResp);
+  // 用户粉丝列表
+  rpc followerList (ListReq) returns (ListResp);
+  // 用户好友列表
+  rpc friendList (ListReq) returns (ListResp);
+}
+
+message  ActionReq {
+  string Token = 1;             // 鉴权token
+  int64  ToUserId = 2;          // 对方ID
+  int32  ActionType = 3;        // 1-关注，2-取消关注
+}
+message ActionResp {
+  int32 StatusCode = 1;  // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;  // 返回状态描述
+}
+
+message ListReq {
+  int64 UserID = 1;   // 用户ID
+  string Token = 2;   // 鉴权token
+}
+message ListResp {
+  int32 StatusCode = 1;          // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;          // 返回状态描述
+  repeated User UserList = 3;    // 用户列表
+}
+
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}

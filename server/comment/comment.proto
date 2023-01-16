@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option go_package="./;";
+package comment;
+
+service commentRpc {
+  // 评论操作
+  rpc commentAction (commentActionReq) returns (commentActionResp);
+  // 评论列表
+  rpc commentList (commentListReq) returns (commentListResp);
+}
+
+message commentActionReq {
+  string Token = 1;       // 用户鉴权token
+  int64  VideoId = 2;     // 视频id
+  int32  ActionType = 3;  // 1-发布评论，2-删除评论
+  string CommentText = 4; // 用户填写的评论内容，在action_type=1的时候使用
+  int64  CommentId = 5;   // 要删除的评论id，在action_type=2的时候使用
+}
+message commentActionResp {
+  Comment Comment = 1;   // 评论成功返回评论内容，不需要重新拉取整个列表
+}
+
+message commentListReq {
+  string Token = 1;  // 鉴权token
+  int64 VideoId = 2; // 视频id
+}
+message commentListResp {
+  int32 StatusCode = 1;             // 状态码，0-成功，其他值-失败
+  string StatusMsg = 2;             // 返回状态描述
+  repeated Comment CommentList = 3; // 评论列表
+}
+
+message Comment {
+  int64 ID = 1;          //评论id
+  User  User = 2;        //评论用户信息
+  string  Content = 3;   //评论内容
+  string CreateDate = 4; //评论发布日期，格式 mm-dd
+}
+message User  {
+  int64  ID = 1;                     // 用户id
+  string Username = 2;               // 用户名称
+  optional int64  FollowCount = 3;   // 关注总数
+  optional int64  FollowerCount = 4; // 粉丝总数
+  bool   IsFollow = 5;               // true-已关注，false-未关注
+}
