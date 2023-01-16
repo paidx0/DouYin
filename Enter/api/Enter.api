@@ -1,0 +1,11 @@
+info(
+	title: "抖音极简版"
+	desc: "抖音极简版"
+)
+
+import "Feed.api"
+import "User.api"
+import "Publish.api"
+import "Favorite.api"
+import "Comment.api"
+import "Relation.api"

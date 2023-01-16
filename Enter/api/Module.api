@@ -1,0 +1,25 @@
+type Video struct {
+    Id int64 `json:"id" form:"id"`                                     // 视频唯一标识
+    Author User `json:"author" form:"author"`                          // 视频作者信息
+    PlayUrl string `json:"play_url" form:"play_url"`                   // 视频播放地址
+    CoverUrl string `json:"cover_url" form:"cover_url"`                // 视频封面地址
+    FavoriteCount int64 `json:"favorite_count" form:"favorite_count"`  // 视频的点赞总数
+    CommentCount int64 `json:"comment_count" form:"comment_count"`     // 视频的评论总数
+    IsFavorite bool `json:"is_favorite" form:"is_favorite"`            // true-已点赞，false-未点赞
+    Title string `json:"title" form:"title"`                           // 视频标题
+}
+
+type User struct {
+    Id int64 `json:"id" form:"id"`                                    // 用户id
+    Username string `json:"name" form:"username"`                     // 用户名称
+    FollowCount int64 `json:"follow_count" form:"follow_count"`       // 关注总数
+    FollowerCount int64 `json:"follower_count" form:"follower_count"` // 粉丝总数
+    IsFollow bool `json:"is_follow" form:"is_follow"`                 // true-已关注，false-未关注
+}
+
+type Comment {
+    Id int64 `json:"id" form:"id"`                            //评论id
+    User User `json:"user" form:"user"`                       //评论用户信息
+    Content string `json:"content" form:"content"`            //评论内容
+    CreateDate string `json:"create_date" form:"create_date"` //评论发布日期，格式 mm-dd
+}

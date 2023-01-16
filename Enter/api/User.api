@@ -1,0 +1,47 @@
+import "Module.api"
+
+@server(
+	group : user
+)
+service douyin-api {
+	// 用户注册接口
+	@handler register
+	post /douyin/user/register (Req) returns (Resp)
+	// 用户登录接口
+	@handler login
+	post /douyin/user/login (Req) returns (Resp)
+}
+
+type (
+	Req {
+		Username string `form:"username"` // 用户名，最长32个字符
+		Password string `form:"password"` // 密码，最长32个字符
+	}
+	Resp {
+		StatusCode int32  `json:"status_code"` // 状态码，0-成功，其他值-失败
+		StatusMsg  string `json:"status_msg"`  // 返回状态描述
+		UserID     int64  `json:"user_id"`     // 用户id
+		Token      string `json:"token"`       // 用户鉴权token
+	}
+)
+
+@server(
+	group: user
+)
+service douyin-api {
+	// 用户信息
+	@handler userInfo
+	get /douyin/user (userInfoReq) returns (userInfoResp)
+}
+
+type (
+	userInfoReq {
+		UserId int64  `form:"user_id"` // 用户ID
+		Token  string `form:"token"`   // 鉴权token
+	}
+	userInfoResp {
+		StatusCode int32  `json:"status_code"` // 状态码，0-成功，其他值-失败
+		StatusMsg  string `json:"status_msg"`  // 返回状态描述
+		UserInfo   User   `json:"user"`        // 用户信息
+	}
+)

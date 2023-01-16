@@ -1,0 +1,10 @@
+Name: douyin-api
+Host: 0.0.0.0
+Port: 8888
+
+# 同样把RPC加进来
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc

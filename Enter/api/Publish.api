@@ -1,0 +1,44 @@
+import "Module.api"
+
+@server(
+    group : publish
+)
+service douyin-api {
+    // 视频投稿
+    @handler action
+    post /douyin/publish/action (publishActionReq) returns (publishActionResp)
+    // 发布列表
+    @handler list
+    get /douyin/publish/list (publishListReq) returns (publishListResp)
+}
+
+type (
+    publishActionReq {
+        Token string `json:"token" form:"token"`     // 鉴权token
+        Data *FileHeader `json:"data" form:"data"`   // 视频数据
+        Title string `json:"title" form:"title"`     // 视频标题
+    }
+    publishActionResp {
+        StatusCode int32 `json:"status_code"` // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`  // 返回状态描述
+    }
+    FileHeader {
+        Filename string `json:"filename" form:"filename"`
+        Header map[string][]string `json:"header" form:"header"`
+        Size int64 `json:"size" form:"size"`
+        content []byte `json:"content" form:"content"`
+        tmpfile string `json:"tmpfile" form:"tmpfile"`
+    }
+)
+
+type (
+    publishListReq {
+        UserID int64 `json:"user_id" form:"user_id"`   // 用户ID
+        Token string `json:"token" form:"token"`       // 鉴权token
+    }
+    publishListResp {
+        StatusCode int32 `json:"status_code"`  // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`   // 返回状态描述
+        VideoList []Video `json:"video_list"`  // 视频列表
+    }
+)

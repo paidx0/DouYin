@@ -1,0 +1,40 @@
+import "Module.api"
+
+@server(
+    group : comment
+)
+service douyin-api {
+    // 评论操作
+    @handler action
+    post /douyin/comment/action (commentActionReq) returns (commentActionResq)
+    // 评论列表
+    @handler list
+    get /douyin/comment/list (commentListReq) returns (commentListResp)
+}
+
+type (
+    commentActionReq {
+        Token string `form:"token"`                              // 用户鉴权token
+        VideoId int64 `form:"video_id"`                          // 视频id
+        ActionType int32 `form:"action_type"`                    // 1-发布评论，2-删除评论
+        CommentText string `form:"comment_text,optional"`        // 用户填写的评论内容，在action_type=1的时候使用
+        CommentId int64 `form:"comment_id,optional"`             // 要删除的评论id，在action_type=2的时候使用
+    }
+    commentActionResq {
+        StatusCode int32 `json:"status_code"` // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`  // 返回状态描述
+        Comment Comment `json:"comment"`      // 评论成功返回评论内容，不需要重新拉取整个列表
+    }
+)
+
+type (
+    commentListReq {
+        Token string `form:"token"`        // 鉴权token
+        VideoId int64 `form:"video_id"`    // 视频id
+    }
+    commentListResp {
+        StatusCode int32 `json:"status_code"`       // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`        // 返回状态描述
+        CommentList []Comment `json:"comment_list"` // 评论列表
+    }
+)

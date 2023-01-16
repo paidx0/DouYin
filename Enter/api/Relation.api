@@ -1,0 +1,43 @@
+import "Module.api"
+
+@server(
+    group : relation
+)
+service douyin-api {
+    // 关注和取消操作
+    @handler action
+    post /douyin/relation/action (ActionReq) returns (ActionResp)
+    // 用户关注列表
+    @handler followlist
+    get /douyin/relation/follow/list (ListReq) returns (ListResp)
+    // 用户粉丝列表
+    @handler followerlist
+    get /douyin/relation/follower/list (ListReq) returns (ListResp)
+    // 用户好友列表
+    @handler friendlist
+    get /douyin/relation/friend/list (ListReq) returns (ListResp)
+}
+
+type (
+    ActionReq {
+        Token string `form:"token"`                         // 鉴权token
+        ToUserId int64 `form:"to_user_id"`                  // 对方ID
+        ActionType int32 `form:"action_type"`               // 1-关注，2-取消关注
+    }
+    ActionResp {
+        StatusCode int32 `json:"status_code"` // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`  // 返回状态描述
+    }
+)
+
+type (
+    ListReq {
+        UserID int64 `form:"user_id"`     // 用户ID
+        Token string `form:"token"`       // 鉴权token
+    }
+    ListResp {
+        StatusCode int32 `json:"status_code"`  // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`   // 返回状态描述
+        UserList []User `json:"user_list"`     // 用户列表
+    }
+)

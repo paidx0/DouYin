@@ -1,0 +1,37 @@
+import "Module.api"
+
+@server(
+    group : favorite
+)
+service douyin-api {
+    // 赞操作
+    @handler action
+    post /douyin/favorite/action (favoriteActionReq) returns (favoriteActionResp)
+    // 喜欢列表
+    @handler list
+    get /douyin/favorite/list (favoriteListReq) returns (favoriteListResp)
+}
+
+type (
+    favoriteActionReq {
+        Token string `form:"token"`                   // 鉴权token
+        VideoID int64 `form:"video_id"`               // 视频ID
+        ActionType int32 `form:"action_type"`         // 1-点赞，2-取消点赞
+    }
+    favoriteActionResp {
+        StatusCode int32 `json:"status_code"` // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`  // 返回状态描述
+    }
+)
+
+type (
+    favoriteListReq {
+        UserID int64 `form:"user_id"`     // 用户ID
+        Token string `form:"token"`       // 鉴权token
+    }
+    favoriteListResp {
+        StatusCode int32 `json:"status_code"`  // 状态码，0-成功，其他值-失败
+        StatusMsg string `json:"status_msg"`   // 返回状态描述
+        VideoList []Video `json:"video_list"`  // 视频列表
+    }
+)
