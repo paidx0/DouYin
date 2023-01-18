@@ -1,6 +1,8 @@
 package favorite
 
 import (
+	"DouYin/global"
+	"DouYin/server/favorite/rpc/favoriterpc"
 	"context"
 
 	"DouYin/Enter/internal/svc"
@@ -24,7 +26,23 @@ func NewActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ActionLogi
 }
 
 func (l *ActionLogic) Action(req *types.FavoriteActionReq) (resp *types.FavoriteActionResp, err error) {
-	// todo: add your logic here and delete this line
+	// 交给FavoriteRPC处理
+	actionResp, err := l.svcCtx.FavoriteRpc.FavoriteAction(l.ctx, &favoriterpc.FavoriteActionReq{
+		Token:      req.Token,
+		VideoID:    req.VideoID,
+		ActionType: req.ActionType,
+	})
 
+	if actionResp.StatusCode != 0 {
+		resp = &types.FavoriteActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}
+	} else {
+		resp = &types.FavoriteActionResp{
+			StatusCode: global.Success,
+			StatusMsg:  "操作成功",
+		}
+	}
 	return
 }

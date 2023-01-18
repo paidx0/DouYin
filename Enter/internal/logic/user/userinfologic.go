@@ -4,11 +4,8 @@ import (
 	"DouYin/Enter/internal/svc"
 	"DouYin/Enter/internal/types"
 	"DouYin/global"
-	"DouYin/models"
-	"DouYin/utils"
+	"DouYin/server/user/rpc/userrpc"
 	"context"
-	"go.uber.org/zap"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,39 +23,29 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 	}
 }
 
-func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq, claim *utils.UserClaim) (resp *types.UserInfoResp, err error) {
-	user := new(models.User)
-	has, err := global.DBEngine.Where("id = ?", req.UserId).Get(user)
+func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoResp, err error) {
+	// 交给UserRpc处理
+	userinfo, err := l.svcCtx.UserRpc.Userinfo(l.ctx, &userrpc.UserInfoReq{
+		UserId: req.UserId,
+		Token:  req.Token,
+	})
 	if err != nil {
-		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return
-	}
-	if !has {
 		resp = &types.UserInfoResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",
 		}
 		return
 	}
-	has, err = global.DBEngine.Where("userkey = ? and touserkey = ?", claim.UserKey, user.UserKey).Get(&models.UserFocusOn{})
-	if err != nil {
-		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return
-	}
-	isfollow := false
-	if has {
-		isfollow = true
-	}
 
 	resp = &types.UserInfoResp{
 		StatusCode: global.Success,
 		StatusMsg:  "操作成功",
 		UserInfo: types.User{
-			Id:            int64(user.Id),
-			Username:      user.Username,
-			FollowCount:   int64(user.FollowCount),
-			FollowerCount: int64(user.FollowerCount),
-			IsFollow:      isfollow,
+			Id:            userinfo.UserInfo.ID,
+			Username:      userinfo.UserInfo.Username,
+			FollowCount:   userinfo.UserInfo.FollowCount,
+			FollowerCount: userinfo.UserInfo.FollowerCount,
+			IsFollow:      userinfo.UserInfo.IsFollow,
 		},
 	}
 	return

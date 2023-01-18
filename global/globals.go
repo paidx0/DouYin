@@ -16,5 +16,6 @@ var (
 )
 
 var (
-	LogDir = "./../log"
+	LogDir      = "./../log"
+	DateTimeFmt = "2006-01-02 15:04:05"
 )

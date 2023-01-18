@@ -9,5 +9,6 @@ type Config struct {
 	rest.RestConf
 
 	// 同样把RPC加进来
-	UserRpc zrpc.RpcClientConf
+	UserRpc     zrpc.RpcClientConf
+	FavoriteRpc zrpc.RpcClientConf
 }

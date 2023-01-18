@@ -59,6 +59,7 @@ func (l *RegisterLogic) Register(req *types.Req) (resp *types.Resp, err error) {
 		}
 		return
 	}
+
 	// 交给UserRpc处理
 	register, err := l.svcCtx.UserRpc.Register(l.ctx, &userrpc.Req{
 		Username: req.Username,
