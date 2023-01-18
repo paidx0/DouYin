@@ -1,0 +1,23 @@
+# JWT 配置
+jwt:
+  signing-key: 'douyin-demo'
+  expires-time: 604800
+  buffer-time: 86400
+
+# Redis 配置
+redis:
+  db: 0
+  addr: '127.0.0.1:6379'
+  password: ''
+
+# MySQL 配置
+mysql:
+  path: 'localhost:3306'
+  dbname: 'DouYin'
+  dbuser: 'root'
+  dbpasswd: 'hyh1203+'
+
+# Zap 配置
+zap:
+  format: 'console'
+

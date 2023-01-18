@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package="./;";
+option go_package = "./;";
 package favorite;
 
 service favoriteRpc {
@@ -17,7 +17,6 @@ message favoriteActionReq {
 }
 message favoriteActionResp {
   int32 StatusCode = 1; // 状态码，0-成功，其他值-失败
-  string StatusMsg = 2; // 返回状态描述
 }
 
 message  favoriteListReq {
@@ -25,9 +24,7 @@ message  favoriteListReq {
   string  Token = 2;  // 鉴权token
 }
 message favoriteListResp {
-  int32 StatusCode = 1;           // 状态码，0-成功，其他值-失败
-  string StatusMsg = 2;           // 返回状态描述
-  repeated Video VideoList = 3;   // 视频列表
+  repeated Video VideoList = 1;   // 视频列表
 }
 
 message Video  {
@@ -44,7 +41,7 @@ message Video  {
 message User  {
   int64  ID = 1;                     // 用户id
   string Username = 2;               // 用户名称
-  optional int64  FollowCount = 3;   // 关注总数
-  optional int64  FollowerCount = 4; // 粉丝总数
+  int64  FollowCount = 3;            // 关注总数
+  int64  FollowerCount = 4;          // 粉丝总数
   bool   IsFollow = 5;               // true-已关注，false-未关注
 }

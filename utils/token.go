@@ -8,18 +8,18 @@ import (
 )
 
 type UserClaim struct {
-	ID       int
+	Id       int
 	Username string
-	UserKey  string
+	Userkey  string
 	jwt.StandardClaims
 }
 
 // CreateToken 生成token
 func CreateToken(id int, userkey, name string) (string, error) {
 	uc := UserClaim{
-		ID:       id,
+		Id:       id,
 		Username: name,
-		UserKey:  userkey,
+		Userkey:  userkey,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Second * time.Duration(global.CONFIG.JWT.ExpiresTime)).Unix(),
 		},
@@ -41,8 +41,20 @@ func DecodeToken(token string) (*UserClaim, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := claims.Claims.(UserClaim); ok && claims.Valid {
+	if _, ok := claims.Claims.(*UserClaim); ok && claims.Valid {
 		return uc, nil
 	}
-	return nil, errors.New("token失效的！！！")
+	return nil, errors.New("token失效")
+}
+
+// CheckToken 检查UserToken
+func CheckToken(token string) (uc *UserClaim, err error) {
+	if token == "" {
+		return nil, errors.New("token空值")
+	}
+	uc, err = DecodeToken(token)
+	if err != nil {
+		return nil, errors.New("token错误")
+	}
+	return
 }

@@ -33,15 +33,18 @@ func (l *RegisterLogic) Register(in *__.Req) (*__.Resp, error) {
 		Password: in.Password,
 		UserKey:  utils.UUID(),
 	}
+	global.DBEngine.ShowSQL(true)
 	_, err := global.DBEngine.Insert(uc)
 	if err != nil {
 		global.ZAP.Error("数据库插入失败", zap.Error(err))
-		return &__.Resp{}, err
+		return nil, err
 	}
+
+	global.DBEngine.Where("user_key = ?", uc.UserKey).Get(uc)
 	token, err := utils.CreateToken(uc.Id, uc.UserKey, uc.Username)
 	if err != nil {
 		global.ZAP.Error("token生成失败", zap.Error(err))
-		return &__.Resp{}, err
+		return nil, err
 	}
 	return &__.Resp{
 		UserID: int64(uc.Id),

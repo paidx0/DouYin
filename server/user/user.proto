@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package="./;";
+option go_package = "./;";
 package user;
 
 service userRpc {
@@ -32,7 +32,7 @@ message userInfoResp {
 message User  {
   int64  ID = 1;                     // 用户id
   string Username = 2;               // 用户名称
-  optional int64  FollowCount = 3;   // 关注总数
-  optional int64  FollowerCount = 4; // 粉丝总数
+  int64  FollowCount = 3;            // 关注总数
+  int64  FollowerCount = 4;          // 粉丝总数
   bool   IsFollow = 5;               // true-已关注，false-未关注
 }
