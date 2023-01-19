@@ -1,0 +1,6 @@
+2023/01/19 - 13:32:04	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoritelistlogic.go:60	数据库查询失败	{"error": "Error 1146 (42S02): Table 'douyin.session' doesn't exist"}
+2023/01/19 - 14:07:19	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoritelistlogic.go:47	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'id' in 'where clause'"}
+2023/01/19 - 14:08:43	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoritelistlogic.go:47	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'id' in 'where clause'"}
+2023/01/19 - 14:12:02	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoriteactionlogic.go:44	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'id' in 'where clause'"}
+2023/01/19 - 14:12:04	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoriteactionlogic.go:44	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'id' in 'where clause'"}
+2023/01/19 - 14:12:19	error	/Users/paidx0/GolandProjects/DouYin/server/favorite/rpc/internal/logic/favoriteactionlogic.go:44	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'id' in 'where clause'"}

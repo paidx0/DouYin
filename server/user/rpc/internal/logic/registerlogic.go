@@ -41,13 +41,13 @@ func (l *RegisterLogic) Register(in *__.Req) (*__.Resp, error) {
 	}
 
 	global.DBEngine.Where("user_key = ?", uc.UserKey).Get(uc)
-	token, err := utils.CreateToken(uc.Id, uc.UserKey, uc.Username)
+	token, err := utils.CreateToken(uc.Uid, uc.UserKey, uc.Username)
 	if err != nil {
 		global.ZAP.Error("token生成失败", zap.Error(err))
 		return nil, err
 	}
 	return &__.Resp{
-		UserID: int64(uc.Id),
+		UserID: int64(uc.Uid),
 		Token:  token,
 	}, nil
 }

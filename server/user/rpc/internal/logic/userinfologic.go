@@ -38,7 +38,7 @@ func (l *UserinfoLogic) Userinfo(in *__.UserInfoReq) (*__.UserInfoResp, error) {
 	// 处理业务
 	// 用户是否存在
 	user := new(models.User)
-	has, err := global.DBEngine.Where("id = ?", in.UserId).Get(user)
+	has, err := global.DBEngine.Where("uid = ?", in.UserId).Get(user)
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
 		return nil, err
@@ -60,7 +60,7 @@ func (l *UserinfoLogic) Userinfo(in *__.UserInfoReq) (*__.UserInfoResp, error) {
 
 	return &__.UserInfoResp{
 		UserInfo: &__.User{
-			ID:            int64(user.Id),
+			ID:            int64(user.Uid),
 			Username:      user.Username,
 			FollowCount:   int64(user.FollowCount),
 			FollowerCount: int64(user.FollowerCount),

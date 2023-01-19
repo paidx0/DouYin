@@ -39,14 +39,14 @@ func (l *LoginLogic) Login(in *__.Req) (*__.Resp, error) {
 		return nil, errors.New("用户名或密码错误")
 	}
 
-	token, err := utils.CreateToken(user.Id, user.UserKey, user.Username)
+	token, err := utils.CreateToken(user.Uid, user.UserKey, user.Username)
 	if err != nil {
 		global.ZAP.Error("token生成失败", zap.Error(err))
 		return nil, err
 	}
 
 	return &__.Resp{
-		UserID: int64(user.Id),
+		UserID: int64(user.Uid),
 		Token:  token,
 	}, nil
 }

@@ -17,7 +17,6 @@ type (
 	FavoriteActionResp = __.FavoriteActionResp
 	FavoriteListReq    = __.FavoriteListReq
 	FavoriteListResp   = __.FavoriteListResp
-	User               = __.User
 	Video              = __.Video
 
 	FavoriteRpc interface {

@@ -30,7 +30,7 @@ func NewFavoriteActionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Fa
 
 // 赞操作
 func (l *FavoriteActionLogic) FavoriteAction(in *__.FavoriteActionReq) (*__.FavoriteActionResp, error) {
-	// 检查 UserToken
+	// 检查 UserToken，是否登录
 	userClaim, err := utils.CheckToken(in.Token)
 	if err != nil {
 		return &__.FavoriteActionResp{StatusCode: 1}, err
@@ -39,7 +39,7 @@ func (l *FavoriteActionLogic) FavoriteAction(in *__.FavoriteActionReq) (*__.Favo
 	// 处理业务
 	// 点赞还是取消点赞，1-点赞，2-取消点赞
 	video := new(models.Video)
-	has, err := global.DBEngine.Where("id = ?", in.VideoID).Get(video)
+	has, err := global.DBEngine.Where("vid = ?", in.VideoId).Get(video)
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
 		return &__.FavoriteActionResp{StatusCode: 1}, err
@@ -50,18 +50,23 @@ func (l *FavoriteActionLogic) FavoriteAction(in *__.FavoriteActionReq) (*__.Favo
 
 	if in.ActionType == 1 {
 		_, err := global.DBEngine.Insert(&models.UserLikeVideo{
-			UserKey:  userClaim.Userkey,
-			VideoKey: video.VideoKey,
+			UserKey:    userClaim.Userkey,
+			VideoKey:   video.VideoKey,
+			IsFavorite: true,
 		})
 		if err != nil {
 			global.ZAP.Error("数据库插入失败", zap.Error(err))
 			return &__.FavoriteActionResp{StatusCode: 1}, err
 		}
 	} else if in.ActionType == 2 {
-		global.DBEngine.Delete(&models.UserLikeVideo{
+		_, err := global.DBEngine.Delete(&models.UserLikeVideo{
 			UserKey:  userClaim.Userkey,
 			VideoKey: video.VideoKey,
 		})
+		if err != nil {
+			global.ZAP.Error("数据库删除失败", zap.Error(err))
+			return &__.FavoriteActionResp{StatusCode: 1}, err
+		}
 	} else {
 		return &__.FavoriteActionResp{StatusCode: 1}, nil
 	}
