@@ -29,7 +29,7 @@ func (l *ActionLogic) Action(req *types.FavoriteActionReq) (resp *types.Favorite
 	// 交给FavoriteRPC处理
 	actionResp, err := l.svcCtx.FavoriteRpc.FavoriteAction(l.ctx, &favoriterpc.FavoriteActionReq{
 		Token:      req.Token,
-		VideoID:    req.VideoID,
+		VideoId:    req.VideoID,
 		ActionType: req.ActionType,
 	})
 

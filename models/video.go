@@ -4,7 +4,7 @@ import "time"
 
 // Video 视频信息表
 type Video struct {
-	Id            int
+	Vid           int
 	Title         string
 	PlayUrl       string
 	CoverUrl      string
@@ -13,7 +13,6 @@ type Video struct {
 	Name          string
 	Tag           string
 	VideoKey      string
-	UserKey       string
 	CreatedAt     time.Time `xorm:"created"`
 	UpdatedAt     time.Time `xorm:"updated"`
 	DeletedAt     time.Time `xorm:"deleted"`

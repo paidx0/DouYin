@@ -4,7 +4,7 @@ import "time"
 
 // User 用户信息表
 type User struct {
-	Id            int
+	Uid           int
 	Username      string
 	Password      string
 	FollowCount   int
