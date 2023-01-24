@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package="./;";
+option go_package = "./;";
 package comment;
 
 service commentRpc {
@@ -18,7 +18,8 @@ message commentActionReq {
   int64  CommentId = 5;   // 要删除的评论id，在action_type=2的时候使用
 }
 message commentActionResp {
-  Comment Comment = 1;   // 评论成功返回评论内容，不需要重新拉取整个列表
+  int32 StatusCode = 1;  // 状态码，0-成功，其他值-失败
+  Comment Comment = 2;   // 评论成功返回评论内容，不需要重新拉取整个列表
 }
 
 message commentListReq {
@@ -26,21 +27,19 @@ message commentListReq {
   int64 VideoId = 2; // 视频id
 }
 message commentListResp {
-  int32 StatusCode = 1;             // 状态码，0-成功，其他值-失败
-  string StatusMsg = 2;             // 返回状态描述
-  repeated Comment CommentList = 3; // 评论列表
+  int64 Cnt = 1;                    // 视频数
+  repeated Comment CommentList = 2; // 评论列表
+  int32 StatusCode = 3;             // 状态码，0-成功，其他值-失败
 }
 
 message Comment {
-  int64 ID = 1;          //评论id
-  User  User = 2;        //评论用户信息
-  string  Content = 3;   //评论内容
-  string CreateDate = 4; //评论发布日期，格式 mm-dd
-}
-message User  {
-  int64  ID = 1;                     // 用户id
-  string Username = 2;               // 用户名称
-  optional int64  FollowCount = 3;   // 关注总数
-  optional int64  FollowerCount = 4; // 粉丝总数
-  bool   IsFollow = 5;               // true-已关注，false-未关注
+  int64  Cid = 1;         //评论id
+  string CommentText = 3; //评论内容
+  string CreatedAt = 4;   //评论发布日期，格式 mm-dd
+  //评论用户信息
+  int64  Uid = 5;           // 用户id
+  string Username = 6;      // 用户名称
+  int64  FollowCount = 7;   // 关注总数
+  int64  FollowerCount = 8; // 粉丝总数
+  bool   IsFollow = 9;      // true-已关注，false-未关注
 }

@@ -26,6 +26,7 @@ message  favoriteListReq {
 message favoriteListResp {
   repeated Video VideoList = 1;   // 视频列表
   int64 Cnt = 2;                  // 视频数
+  int32 StatusCode = 3;           // 状态码，0-成功，其他值-失败
 }
 
 message Video  {

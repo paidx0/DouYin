@@ -29,32 +29,31 @@ func NewFavoriteListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Favo
 
 // 喜欢列表
 func (l *FavoriteListLogic) FavoriteList(in *__.FavoriteListReq) (*__.FavoriteListResp, error) {
-	// 验证 Token 是否登录userClaim
+	// 验证 Token
 	uc, err := utils.CheckToken(in.Token)
 	if err != nil {
-		return nil, err
+		return &__.FavoriteListResp{StatusCode: 1}, err
 	}
 
 	// 处理业务
-	// 用户是否存在
 	user := new(models.User)
 	has, err := global.DBEngine.Where("uid = ?", in.UserId).Get(user)
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.FavoriteListResp{StatusCode: 1}, err
 	}
 	if !has {
-		return nil, errors.New("用户不存在")
+		return &__.FavoriteListResp{StatusCode: 1}, errors.New("列表该用户不存在")
 	}
 
 	// 喜爱视频数
 	cnt, err := global.DBEngine.Where("userlikevideo.user_key = ? and userlikevideo.deleted_at IS NULL", user.UserKey).Count(&models.UserLikeVideo{})
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.FavoriteListResp{StatusCode: 1}, err
 	}
 	if cnt < 1 {
-		return nil, errors.New("点赞视频列表空")
+		return &__.FavoriteListResp{StatusCode: 1}, errors.New("点赞视频列表空")
 	}
 	videoList := make([]*__.Video, cnt, 2*cnt)
 
@@ -63,18 +62,19 @@ func (l *FavoriteListLogic) FavoriteList(in *__.FavoriteListReq) (*__.FavoriteLi
 		Join("LEFT", "video", "video.video_key = userlikevideo.video_key").Where("video.deleted_at IS NULL").
 		Join("LEFT", "userpulishvideo", "video.video_key = userpulishvideo.video_key").Where("userpulishvideo.deleted_at IS NULL").
 		Join("LEFT", "user", "user.user_key = userpulishvideo.user_key").Where("user.deleted_at IS NULL").
-		Join("LEFT", "userfocuson", "userfocuson.to_user_key = user.user_key").Where("userfocuson.user_key = ? and userfocuson.deleted_at IS NULL", uc.Userkey).
+		Join("LEFT", "userfocuson", "userfocuson.to_user_key = user.user_key").Where("(userfocuson.user_key = ? and userfocuson.deleted_at IS NULL) or 1", uc.Userkey).
 		Join("LEFT", fmt.Sprintf(`(SELECT is_favorite,video_key from userlikevideo where user_key = "%s" AND deleted_at IS NULL) myuserlikevideo`, uc.Userkey), "myuserlikevideo.video_key = userlikevideo.video_key").
 		Select("video.vid ,video.title ,video.play_url ,video.cover_url ,video.favorite_count ,video.comment_count ,user.uid ,user.username ,user.follow_count ,user.follower_count ,myuserlikevideo.is_favorite,userfocuson.is_follow").
 		Find(&videoList)
 
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.FavoriteListResp{StatusCode: 1}, err
 	}
 
 	return &__.FavoriteListResp{
-		VideoList: videoList[cnt:],
-		Cnt:       cnt,
+		VideoList:  videoList[cnt:],
+		Cnt:        cnt,
+		StatusCode: 0,
 	}, nil
 }

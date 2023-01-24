@@ -19,6 +19,7 @@ message  Req {
 message Resp {
   int64 UserID = 1;      // 用户id
   string Token = 2;      // 用户鉴权token
+  int32 StatusCode = 3;  // 状态码，0-成功，其他值-失败
 }
 
 message  userInfoReq {
@@ -27,6 +28,7 @@ message  userInfoReq {
 }
 message userInfoResp {
   User   UserInfo = 1;    // 用户信息
+  int32 StatusCode = 2;   // 状态码，0-成功，其他值-失败
 }
 
 message User  {

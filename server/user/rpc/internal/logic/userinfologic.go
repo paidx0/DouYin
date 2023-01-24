@@ -30,28 +30,27 @@ func NewUserinfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Userinfo
 // 用户信息
 func (l *UserinfoLogic) Userinfo(in *__.UserInfoReq) (*__.UserInfoResp, error) {
 	// 验证 Token，拿到用户ID和Key
-	userClaim, err := utils.CheckToken(in.Token)
+	uc, err := utils.CheckToken(in.Token)
 	if err != nil {
-		return nil, err
+		return &__.UserInfoResp{StatusCode: 1}, err
 	}
 
 	// 处理业务
-	// 用户是否存在
 	user := new(models.User)
 	has, err := global.DBEngine.Where("uid = ?", in.UserId).Get(user)
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.UserInfoResp{StatusCode: 1}, err
 	}
 	if !has {
-		return nil, errors.New("列表用户不存在")
+		return &__.UserInfoResp{StatusCode: 1}, errors.New("列表该用户不存在")
 	}
 
 	// 是否关注了该用户
-	has, err = global.DBEngine.Where("user_key = ? and to_user_key = ?", userClaim.Userkey, user.UserKey).Get(&models.UserFocusOn{})
+	has, err = global.DBEngine.Where("user_key = ? and to_user_key = ?", uc.Userkey, user.UserKey).Get(&models.UserFocusOn{})
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.UserInfoResp{StatusCode: 1}, err
 	}
 	isfollow := false
 	if has {
@@ -59,6 +58,7 @@ func (l *UserinfoLogic) Userinfo(in *__.UserInfoReq) (*__.UserInfoResp, error) {
 	}
 
 	return &__.UserInfoResp{
+		StatusCode: 0,
 		UserInfo: &__.User{
 			ID:            int64(user.Uid),
 			Username:      user.Username,

@@ -9,6 +9,7 @@ import (
 	"context"
 	"errors"
 	"go.uber.org/zap"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -33,20 +34,27 @@ func (l *LoginLogic) Login(in *__.Req) (*__.Resp, error) {
 	has, err := global.DBEngine.Where("username = ? and password = ?", in.Username, in.Password).Get(user)
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return nil, err
+		return &__.Resp{StatusCode: 1}, err
 	}
 	if !has {
-		return nil, errors.New("用户名或密码错误")
+		return &__.Resp{StatusCode: 1}, errors.New("用户名或密码错误")
 	}
 
 	token, err := utils.CreateToken(user.Uid, user.UserKey, user.Username)
 	if err != nil {
 		global.ZAP.Error("token生成失败", zap.Error(err))
-		return nil, err
+		return &__.Resp{StatusCode: 1}, err
+	}
+	// token 存入Redis
+	err = global.REDIS.Set(l.ctx, "token", token, time.Second*time.Duration(global.CONFIG.JWT.ExpiresTime)).Err()
+	if err != nil {
+		global.ZAP.Error("redis保存token失败", zap.Error(err))
+		return &__.Resp{StatusCode: 1}, err
 	}
 
 	return &__.Resp{
-		UserID: int64(user.Uid),
-		Token:  token,
+		UserID:     int64(user.Uid),
+		Token:      token,
+		StatusCode: 0,
 	}, nil
 }
