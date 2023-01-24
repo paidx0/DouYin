@@ -2,6 +2,7 @@ package utils
 
 import (
 	"DouYin/global"
+	"context"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"time"
@@ -52,6 +53,14 @@ func CheckToken(token string) (uc *UserClaim, err error) {
 	if token == "" {
 		return nil, errors.New("token空值")
 	}
+	expect, err := global.REDIS.Get(context.Background(), "token").Result()
+	if err != nil {
+		return nil, err
+	}
+	if expect != token {
+		return nil, errors.New("无权操作")
+	}
+
 	uc, err = DecodeToken(token)
 	if err != nil {
 		return nil, errors.New("token错误")

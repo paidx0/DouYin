@@ -4,7 +4,7 @@ import "time"
 
 // Comment 评论信息表
 type Comment struct {
-	Id          int
+	Cid         int
 	UserKey     string
 	VideoKey    string
 	CommentText string
