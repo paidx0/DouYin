@@ -1,12 +1,11 @@
 package favorite
 
 import (
+	"DouYin/Enter/internal/svc"
+	"DouYin/Enter/internal/types"
 	"DouYin/global"
 	"DouYin/server/favorite/rpc/favoriterpc"
 	"context"
-
-	"DouYin/Enter/internal/svc"
-	"DouYin/Enter/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -33,7 +32,7 @@ func (l *ActionLogic) Action(req *types.FavoriteActionReq) (resp *types.Favorite
 		ActionType: req.ActionType,
 	})
 
-	if actionResp.StatusCode != 0 {
+	if err != nil || actionResp.StatusCode != 0 {
 		resp = &types.FavoriteActionResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",

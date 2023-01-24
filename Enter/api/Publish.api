@@ -14,27 +14,27 @@ service douyin-api {
 
 type (
     publishActionReq {
-        Token string `json:"token" form:"token"`     // 鉴权token
-        Data *FileHeader `json:"data" form:"data"`   // 视频数据
-        Title string `json:"title" form:"title"`     // 视频标题
+        Token string `form:"token"`      // 鉴权token
+       // Data *FileHeader `form:"data"`   // 视频数据
+        Title string `form:"title"`      // 视频标题
     }
     publishActionResp {
         StatusCode int32 `json:"status_code"` // 状态码，0-成功，其他值-失败
         StatusMsg string `json:"status_msg"`  // 返回状态描述
     }
-    FileHeader {
-        Filename string `json:"filename" form:"filename"`
-        Header map[string][]string `json:"header" form:"header"`
-        Size int64 `json:"size" form:"size"`
-        content []byte `json:"content" form:"content"`
-        tmpfile string `json:"tmpfile" form:"tmpfile"`
-    }
+//    FileHeader {
+//        Filename string `form:"filename"`
+//        Header map[string][]string `form:"header"`
+//        Size int64 `form:"size"`
+//        content []byte `form:"content"`
+//        tmpfile string `form:"tmpfile"`
+//    }
 )
 
 type (
     publishListReq {
-        UserID int64 `json:"user_id" form:"user_id"`   // 用户ID
-        Token string `json:"token" form:"token"`       // 鉴权token
+        UserID int64 `form:"user_id"`     // 用户ID
+        Token string `form:"token"`       // 鉴权token
     }
     publishListResp {
         StatusCode int32 `json:"status_code"`  // 状态码，0-成功，其他值-失败

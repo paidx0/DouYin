@@ -21,3 +21,10 @@ mysql:
 zap:
   format: 'console'
 
+# 七牛云 配置
+qiniu:
+  access-key: 'KBCIhrKkTFFQo1nEIRh3Olrf1T8EkCYpwpCvkuED'
+  secret-key: '2H_x0uDJmAmCub4aXrMoyNJaYpWs_sEjDvbeVHPq'
+  bucket: 'doyin-paidx0'
+  qiniu-server: 'http://rorwnk4kz.hn-bkt.clouddn.com/'
+  path: 'uploads/'

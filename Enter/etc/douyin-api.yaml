@@ -14,3 +14,15 @@ FavoriteRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: favorite.rpc
+
+PublishRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: publish.rpc
+
+CommentRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: comment.rpc

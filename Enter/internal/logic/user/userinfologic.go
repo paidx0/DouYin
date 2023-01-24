@@ -29,7 +29,7 @@ func (l *UserInfoLogic) UserInfo(req *types.UserInfoReq) (resp *types.UserInfoRe
 		UserId: req.UserId,
 		Token:  req.Token,
 	})
-	if err != nil {
+	if err != nil || userinfo.StatusCode != 0 {
 		resp = &types.UserInfoResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",

@@ -9,4 +9,5 @@ type Server struct {
 	DB    models2.Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Redis models2.Redis `mapstructure:"redis" json:"redis" yaml:"redis"`
 	ZAP   models2.Zap   `mapstructure:"zap" json:"zap" yaml:"zap"`
+	QiNiu models2.QiNiu `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
 }

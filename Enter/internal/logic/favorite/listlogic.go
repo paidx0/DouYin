@@ -7,6 +7,7 @@ import (
 	"DouYin/server/favorite/rpc/favoriterpc"
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
+	"log"
 )
 
 type ListLogic struct {
@@ -29,7 +30,7 @@ func (l *ListLogic) List(req *types.FavoriteListReq) (resp *types.FavoriteListRe
 		UserId: req.UserID,
 		Token:  req.Token,
 	})
-	if err != nil {
+	if err != nil || listResp.StatusCode != 0 {
 		resp = &types.FavoriteListResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",
@@ -56,6 +57,7 @@ func (l *ListLogic) List(req *types.FavoriteListReq) (resp *types.FavoriteListRe
 			Title:         video.Title,
 		})
 	}
+	log.Println(videoList)
 
 	resp = &types.FavoriteListResp{
 		StatusCode: global.Success,

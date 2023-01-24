@@ -63,9 +63,8 @@ type UserInfoResp struct {
 }
 
 type PublishActionReq struct {
-	Token string      `json:"token" form:"token"` // 鉴权token
-	Data  *FileHeader `json:"data" form:"data"`   // 视频数据
-	Title string      `json:"title" form:"title"` // 视频标题
+	Token string `form:"token"` // 鉴权token
+	Title string `form:"title"` // 视频标题
 }
 
 type PublishActionResp struct {
@@ -73,17 +72,9 @@ type PublishActionResp struct {
 	StatusMsg  string `json:"status_msg"`  // 返回状态描述
 }
 
-type FileHeader struct {
-	Filename string              `json:"filename" form:"filename"`
-	Header   map[string][]string `json:"header" form:"header"`
-	Size     int64               `json:"size" form:"size"`
-	Content  []byte              `json:"content" form:"content"`
-	Tmpfile  string              `json:"tmpfile" form:"tmpfile"`
-}
-
 type PublishListReq struct {
-	UserID int64  `json:"user_id" form:"user_id"` // 用户ID
-	Token  string `json:"token" form:"token"`     // 鉴权token
+	UserID int64  `form:"user_id"` // 用户ID
+	Token  string `form:"token"`   // 鉴权token
 }
 
 type PublishListResp struct {

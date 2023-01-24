@@ -8,6 +8,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/qiniu/go-sdk/v7 v7.14.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.14.0
 	github.com/zeromicro/go-zero v1.4.3
@@ -83,6 +84,7 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect

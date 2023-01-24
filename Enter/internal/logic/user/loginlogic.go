@@ -32,7 +32,7 @@ func (l *LoginLogic) Login(req *types.Req) (resp *types.Resp, err error) {
 		Password: utils.Md5(req.Password),
 	})
 
-	if err != nil {
+	if err != nil || login.StatusCode != 0 {
 		resp = &types.Resp{
 			StatusCode: global.Error,
 			StatusMsg:  "登录失败",

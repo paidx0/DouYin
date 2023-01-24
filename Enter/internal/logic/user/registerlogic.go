@@ -65,13 +65,14 @@ func (l *RegisterLogic) Register(req *types.Req) (resp *types.Resp, err error) {
 		Username: req.Username,
 		Password: utils.Md5(req.Password),
 	})
-	if err != nil {
+	if err != nil || register.StatusCode != 0 {
 		resp = &types.Resp{
 			StatusCode: global.Error,
 			StatusMsg:  "用户注册失败",
 		}
 		return
 	}
+
 	resp = &types.Resp{
 		StatusCode: global.Success,
 		StatusMsg:  "注册成功",
