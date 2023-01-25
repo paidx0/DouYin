@@ -14,7 +14,7 @@
 安装protoc,protoc-gen-go,protoc-gen-grpc-go
     goctl env check -i -f
 生成相应RPC服务
-    goctl rpc protoc user.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=.
+    goctl rpc protoc user.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./rpc
 生成相应API服务
     goctl api go -api user.api -dir .
 ~~~
@@ -85,4 +85,9 @@
 
 ### 1月19日
 - [x] 开始写七牛云
-- 
+
+### 1月25日
+- [x] 完成关注操作
+- [x] 完成关注列表
+- [x] 完成粉丝列表
+- [x] 完成好友列表

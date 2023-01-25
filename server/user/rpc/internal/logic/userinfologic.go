@@ -48,7 +48,9 @@ func (l *UserinfoLogic) Userinfo(in *__.UserInfoReq) (*__.UserInfoResp, error) {
 	}
 
 	// 是否关注了该用户
-	has, err = global.DBEngine.Where("user_key = ? and to_user_key = ?", userClaim.Userkey, user.UserKey).Get(&models.UserFocusOn{})
+	has, err = global.DBEngine.
+		Where("user_key = ? and to_user_key = ?", userClaim.Userkey, user.UserKey).
+		Get(&models.UserFocusOn{})
 	if err != nil {
 		global.ZAP.Error("数据库查询失败", zap.Error(err))
 		return nil, err

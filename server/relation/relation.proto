@@ -35,7 +35,7 @@ message ListResp {
 }
 
 message User  {
-  int64  ID = 1;                     // 用户id
+  int64  Uid = 1;                     // 用户id
   string Username = 2;               // 用户名称
   optional int64  FollowCount = 3;   // 关注总数
   optional int64  FollowerCount = 4; // 粉丝总数

@@ -11,4 +11,5 @@ type Config struct {
 	// 同样把RPC加进来
 	UserRpc     zrpc.RpcClientConf
 	FavoriteRpc zrpc.RpcClientConf
+	RelationRpc zrpc.RpcClientConf
 }

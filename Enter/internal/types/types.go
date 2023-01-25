@@ -141,8 +141,8 @@ type CommentListResp struct {
 
 type ActionReq struct {
 	Token      string `form:"token"`       // 鉴权token
-	ToUserId   int64  `form:"to_user_id"`  // 对方ID
-	ActionType int32  `form:"action_type"` // 1-关注，2-取消关注
+	ToUserId   string `form:"to_user_id"`  // 对方ID
+	ActionType string `form:"action_type"` // 1-关注，2-取消关注
 }
 
 type ActionResp struct {
@@ -151,12 +151,12 @@ type ActionResp struct {
 }
 
 type ListReq struct {
-	UserID int64  `form:"user_id"` // 用户ID
+	UserID string `form:"user_id"` // 用户ID
 	Token  string `form:"token"`   // 鉴权token
 }
 
 type ListResp struct {
-	StatusCode int32  `json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusCode string `json:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg  string `json:"status_msg"`  // 返回状态描述
 	UserList   []User `json:"user_list"`   // 用户列表
 }
