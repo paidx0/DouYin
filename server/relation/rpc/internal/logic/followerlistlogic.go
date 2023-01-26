@@ -60,7 +60,7 @@ func (l *FollowerListLogic) FollowerList(in *__.ListReq) (*__.ListResp, error) {
 		Where("userfocuson.deleted_at is null ").
 		Join("LEFT", "user AS touser", "userfocuson.user_key = touser.user_key").
 		Where("touser.deleted_at is null").
-		Join("LEFT", "userfocuson  AS isfollow", "userfocuson.to_user_key = isfollow.to_user_key  AND isfollow.user_key = ?", userClaim.Userkey).
+		Join("LEFT", "userfocuson  AS isfollow", "touser.user_key = isfollow.to_user_key  AND isfollow.user_key = ?", userClaim.Userkey).
 		Where("isfollow.deleted_at is null").
 		Select("touser.uid, touser.username, touser.follow_count, touser.follower_count, isfollow.is_follow").
 		Find(&followerList)
