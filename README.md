@@ -34,3 +34,7 @@
     ./start.sh
     go run douyin.go -f etc/douyin.yaml
 ~~~
+
+![image](img/img.png)
+![image](img/img_1.png)
+![image](img/img_6.png)
