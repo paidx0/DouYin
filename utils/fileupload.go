@@ -80,3 +80,41 @@ func ResumeUpload(file multipart.File, fileHeader *multipart.FileHeader, filesiz
 	url = global.CONFIG.QiNiu.QiniuServer + ret.Key
 	return url, nil
 }
+
+// TempUpload 临时文件上传
+func TempUpload(filePath string, fileName string) (url string, err error) {
+	putPolicy := storage.PutPolicy{
+		Scope: global.CONFIG.QiNiu.Bucket,
+	}
+	mac := qbox.NewMac(global.CONFIG.QiNiu.AccessKey, global.CONFIG.QiNiu.SecretKey)
+	upToken := putPolicy.UploadToken(mac)
+
+	cfg := storage.Config{
+		Zone:          &storage.ZoneHuanan,
+		UseCdnDomains: false,
+		UseHTTPS:      false,
+	}
+
+	resumeUploader := storage.NewResumeUploaderV2(&cfg)
+	ret := storage.PutRet{}
+
+	recorder, err := storage.NewFileRecorder("./tempdir")
+	if err != nil {
+		global.ZAP.Error("分块上传临时目录错误", zap.Error(err))
+		return
+	}
+	putExtra := storage.RputV2Extra{
+		Recorder: recorder,
+	}
+
+	// 指定路径上传+时间戳，保证视频唯一性
+	key := global.CONFIG.QiNiu.Path + strconv.FormatInt(time.Now().Unix(), 10) + "-" + fileName
+	err = resumeUploader.PutFile(context.Background(), &ret, upToken, key, filePath, &putExtra)
+	if err != nil {
+		global.ZAP.Error("视频投稿上传失败", zap.Error(err))
+		return
+	}
+
+	url = global.CONFIG.QiNiu.QiniuServer + ret.Key
+	return url, nil
+}

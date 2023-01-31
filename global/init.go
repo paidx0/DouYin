@@ -14,15 +14,19 @@ import (
 	"path"
 	"time"
 	"xorm.io/xorm"
+	"xorm.io/xorm/caches"
 )
 
 // InitDB 初始化数据库
 func InitDB() *xorm.Engine {
-	engine, err := xorm.NewEngine("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?%s", CONFIG.DB.DBUser, CONFIG.DB.DBPasswd, CONFIG.DB.Path, CONFIG.DB.DBName, CONFIG.DB.Path))
+	engine, err := xorm.NewEngine("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", CONFIG.DB.DBUser, CONFIG.DB.DBPasswd, CONFIG.DB.Path, CONFIG.DB.DBName))
 	if err != nil {
 		ZAP.Warn("数据库初始化失败", zap.Error(err))
 		return nil
 	}
+	// 缓存500条记录到内存中
+	cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 500)
+	engine.SetDefaultCacher(cacher)
 	return engine
 }
 
@@ -120,7 +124,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		CallerKey:      "caller",
 		StacktraceKey:  "stackracekey",
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeLevel:    zapcore.LowercaseColorLevelEncoder,
 		EncodeTime:     CustomTimeEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder,
@@ -130,7 +134,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 
 // CustomTimeEncoder 日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format("2006/01/02 - 15:04:05"))
+	enc.AppendString(t.Format(DateTimeFmt))
 }
 
 func PathExists(path string) bool {

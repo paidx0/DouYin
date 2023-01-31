@@ -13,9 +13,11 @@ type Video struct {
 	Name          string
 	Tag           string
 	VideoKey      string
-	CreatedAt     time.Time `xorm:"created"`
-	UpdatedAt     time.Time `xorm:"updated"`
-	DeletedAt     time.Time `xorm:"deleted"`
+	// 乐观锁
+	Version   int       `xorm:"version"`
+	CreatedAt time.Time `xorm:"created"`
+	UpdatedAt time.Time `xorm:"updated"`
+	DeletedAt time.Time `xorm:"deleted"`
 }
 
 func (table Video) TableName() string {
