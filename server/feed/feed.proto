@@ -8,14 +8,14 @@ service feedRpc {
 }
 
 message FeedReq  {
-  optional int64  LatestTime = 1 ; // 可选参数，限制返回视频的最新投稿时间戳
-  optional string    Token = 2;    // 可选参数，登录用户设置
+  string  LatestTime = 1 ; // 可选参数，限制返回视频的最新投稿时间戳
+  string    Token = 2;     // 可选参数，登录用户设置
 }
 message FeedResp  {
   int32 StatusCode = 1;             // 状态码，0-成功，其他值-失败
-  string   StatusMsg = 2;           // 返回状态描述
-  repeated Video  VideoList = 3;    // 视频列表
-  optional int64    NextTime = 4;   // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+  repeated Video  VideoList = 2;    // 视频列表
+  int64 Cnt = 3;                    // 视频数
+  int64    NextTime = 4;            // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
 }
 
 
@@ -27,10 +27,11 @@ message Video  {
   int64   CommentCount = 5;   // 视频的评论总数
   bool    IsFavorite = 6;     // true-已点赞，false-未点赞
   string  Title = 7;          // 视频标题
+  string  UpdatedAt = 8;      // 更新时间
   // 视频作者信息
-  int64  Uid = 8;             // 用户id
-  string Username = 9;        // 用户名称
-  int64  FollowCount = 10;    // 关注总数
-  int64  FollowerCount = 11;  // 粉丝总数
-  bool   IsFollow = 12;       // true-已关注，false-未关注
+  int64  Uid = 9;             // 用户id
+  string Username = 10;       // 用户名称
+  int64  FollowCount = 11;    // 关注总数
+  int64  FollowerCount = 12;  // 粉丝总数
+  bool   IsFollow = 13;       // true-已关注，false-未关注
 }

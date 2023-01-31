@@ -3,14 +3,12 @@ package logic
 import (
 	"DouYin/global"
 	"DouYin/models"
+	"DouYin/server/comment/pb"
+	"DouYin/server/comment/rpc/internal/svc"
 	"DouYin/utils"
 	"context"
 	"errors"
 	"go.uber.org/zap"
-	"log"
-
-	"DouYin/server/comment/pb"
-	"DouYin/server/comment/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -49,17 +47,12 @@ func (l *CommentListLogic) CommentList(in *__.CommentListReq) (*__.CommentListRe
 	}
 
 	// 视频评论数
-	cnt, err := global.DBEngine.Where("comment.video_key = ? and comment.deleted_at IS NULL", video.VideoKey).Count(&models.Comment{})
-	if err != nil {
-		global.ZAP.Error("数据库查询失败", zap.Error(err))
-		return &__.CommentListResp{StatusCode: 1}, err
-	}
+	cnt := video.CommentCount
 	if cnt < 1 {
 		return &__.CommentListResp{StatusCode: 1}, errors.New("视频评论空")
 	}
-	commentList := make([]*__.Comment, cnt, 2*cnt)
 
-	global.DBEngine.ShowSQL(true)
+	commentList := make([]*__.Comment, 0, cnt)
 
 	// 返回视频评论列表，包括评论ID、评论内容和时间、及评论者的信息、及我是否关注这个评论者
 	global.DBEngine.Table("comment").Where("comment.video_key = ? and comment.deleted_at IS NULL", video.VideoKey).
@@ -68,11 +61,9 @@ func (l *CommentListLogic) CommentList(in *__.CommentListReq) (*__.CommentListRe
 		Select("comment.cid,comment.comment_text,comment.created_at,user.uid ,user.username ,user.follow_count ,user.follower_count,userfocuson.is_follow").
 		Find(&commentList)
 
-	log.Println(commentList)
-
 	return &__.CommentListResp{
-		Cnt:         cnt,
+		Cnt:         int64(cnt),
 		StatusCode:  0,
-		CommentList: commentList[cnt:],
+		CommentList: commentList,
 	}, nil
 }

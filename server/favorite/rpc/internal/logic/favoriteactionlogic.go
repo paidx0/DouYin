@@ -54,29 +54,74 @@ func (l *FavoriteActionLogic) FavoriteAction(in *__.FavoriteActionReq) (*__.Favo
 			IsFavorite: true,
 		}
 		// 如果已经点赞过，
-		has, err := global.DBEngine.Where("").Get(userlikevideo)
+		has, err := global.DBEngine.Get(userlikevideo)
 		if err != nil {
 			global.ZAP.Error("数据库查询失败", zap.Error(err))
 			return &__.FavoriteActionResp{StatusCode: 1}, err
 		}
+		// 直接返回成功
 		if has {
-			// 直接返回成功
 			return &__.FavoriteActionResp{StatusCode: 0}, nil
 		} else {
 			// 否则添加进去
-			_, err = global.DBEngine.Insert(userlikevideo)
+			// 开启事务
+			session := global.DBEngine.NewSession()
+			defer session.Close()
+			session.Begin()
+
+			_, err = session.Insert(userlikevideo)
 			if err != nil {
 				global.ZAP.Error("数据库插入失败", zap.Error(err))
+				session.Rollback()
+				return &__.FavoriteActionResp{StatusCode: 1}, err
+			}
+			// 点赞数+1
+			_, err = session.Table("video").Where("vid = ?", video.Vid).Update(map[string]interface{}{"favorite_count": video.FavoriteCount + 1})
+			if err != nil {
+				global.ZAP.Error("数据库更新失败", zap.Error(err))
+				session.Rollback()
+				return &__.FavoriteActionResp{StatusCode: 1}, err
+			}
+
+			// 最后提交事务
+			err = session.Commit()
+			if err != nil {
+				global.ZAP.Error("事务提交失败", zap.Error(err))
 				return &__.FavoriteActionResp{StatusCode: 1}, err
 			}
 		}
 	} else if in.ActionType == 2 {
-		_, err := global.DBEngine.Delete(&models.UserLikeVideo{
+		// 点赞数大于0才做-1操作，避免点赞数减到负数
+		if video.FavoriteCount <= 0 {
+			return &__.FavoriteActionResp{StatusCode: 0}, nil
+		}
+
+		session := global.DBEngine.NewSession()
+		defer session.Close()
+		session.Begin()
+
+		_, err := session.Delete(&models.UserLikeVideo{
 			UserKey:  uc.Userkey,
 			VideoKey: video.VideoKey,
 		})
 		if err != nil {
 			global.ZAP.Error("数据库删除失败", zap.Error(err))
+			session.Rollback()
+			return &__.FavoriteActionResp{StatusCode: 1}, err
+		}
+
+		// 点赞数-1
+		_, err = global.DBEngine.Table("video").Where("vid = ?", video.Vid).Update(map[string]interface{}{"favorite_count": video.FavoriteCount - 1})
+		if err != nil {
+			global.ZAP.Error("数据库更新失败", zap.Error(err))
+			session.Rollback()
+			return &__.FavoriteActionResp{StatusCode: 1}, err
+		}
+
+		// 最后提交事务
+		err = session.Commit()
+		if err != nil {
+			global.ZAP.Error("事务提交失败", zap.Error(err))
 			return &__.FavoriteActionResp{StatusCode: 1}, err
 		}
 	} else {

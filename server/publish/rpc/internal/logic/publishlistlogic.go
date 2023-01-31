@@ -55,7 +55,7 @@ func (l *PublishListLogic) PublishList(in *__.PublishListReq) (*__.PublishListRe
 	if cnt < 1 {
 		return &__.PublishListResp{StatusCode: 1}, errors.New("该用户还未投稿过视频")
 	}
-	videoList := make([]*__.Video, cnt, 2*cnt)
+	videoList := make([]*__.Video, 0, cnt)
 
 	// 返回用户投稿列表：包括用户投稿过的视频信息，作者信息，及我是否关注作者和点赞视频
 	err = global.DBEngine.Table("userpulishvideo").Where("userpulishvideo.user_key = ? and userpulishvideo.deleted_at IS NULL", user.UserKey).
@@ -72,7 +72,7 @@ func (l *PublishListLogic) PublishList(in *__.PublishListReq) (*__.PublishListRe
 	}
 
 	return &__.PublishListResp{
-		VideoList:  videoList[cnt:],
+		VideoList:  videoList,
 		Cnt:        cnt,
 		StatusCode: 0,
 	}, nil

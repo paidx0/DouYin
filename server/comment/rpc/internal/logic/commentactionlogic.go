@@ -58,6 +58,12 @@ func (l *CommentActionLogic) CommentAction(in *__.CommentActionReq) (*__.Comment
 			global.ZAP.Error("数据库插入失败", zap.Error(err))
 			return &__.CommentActionResp{StatusCode: 1}, err
 		}
+		// 评论数+1
+		_, err = global.DBEngine.Table("video").Where("vid = ?", video.Vid).Update(map[string]interface{}{"comment_count": video.CommentCount + 1})
+		if err != nil {
+			global.ZAP.Error("数据库更新失败", zap.Error(err))
+			return &__.CommentActionResp{StatusCode: 1}, err
+		}
 	} else if in.ActionType == 2 && in.CommentId != 0 {
 		_, err := global.DBEngine.Delete(&models.Comment{
 			UserKey:  uc.Userkey,
@@ -66,6 +72,12 @@ func (l *CommentActionLogic) CommentAction(in *__.CommentActionReq) (*__.Comment
 		})
 		if err != nil {
 			global.ZAP.Error("数据库删除失败", zap.Error(err))
+			return &__.CommentActionResp{StatusCode: 1}, err
+		}
+		// 评论数-1
+		_, err = global.DBEngine.Table("video").Where("vid = ?", video.Vid).Update(map[string]interface{}{"comment_count": video.CommentCount - 1})
+		if err != nil {
+			global.ZAP.Error("数据库更新失败", zap.Error(err))
 			return &__.CommentActionResp{StatusCode: 1}, err
 		}
 		return &__.CommentActionResp{StatusCode: 3}, nil

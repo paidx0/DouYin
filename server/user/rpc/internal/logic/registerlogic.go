@@ -48,7 +48,7 @@ func (l *RegisterLogic) Register(in *__.Req) (*__.Resp, error) {
 		return &__.Resp{StatusCode: 1}, err
 	}
 	// token 存入Redis
-	err = global.REDIS.Set(l.ctx, "token", token, time.Duration(global.CONFIG.JWT.ExpiresTime)).Err()
+	err = global.REDIS.Set(l.ctx, "token", token, time.Second*time.Duration(global.CONFIG.JWT.ExpiresTime)).Err()
 	if err != nil {
 		global.ZAP.Error("redis保存token失败", zap.Error(err))
 		return &__.Resp{StatusCode: 1}, err

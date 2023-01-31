@@ -55,7 +55,8 @@ func (l *FavoriteListLogic) FavoriteList(in *__.FavoriteListReq) (*__.FavoriteLi
 	if cnt < 1 {
 		return &__.FavoriteListResp{StatusCode: 1}, errors.New("点赞视频列表空")
 	}
-	videoList := make([]*__.Video, cnt, 2*cnt)
+
+	videoList := make([]*__.Video, 0, cnt)
 
 	// 返回用户喜爱列表：包括视频信息、发布者信息、及我是否点赞过这个视频、我是否关注这个作者
 	err = global.DBEngine.Table("userlikevideo").Where("userlikevideo.user_key = ? and userlikevideo.deleted_at IS NULL", user.UserKey).
@@ -73,7 +74,7 @@ func (l *FavoriteListLogic) FavoriteList(in *__.FavoriteListReq) (*__.FavoriteLi
 	}
 
 	return &__.FavoriteListResp{
-		VideoList:  videoList[cnt:],
+		VideoList:  videoList,
 		Cnt:        cnt,
 		StatusCode: 0,
 	}, nil
