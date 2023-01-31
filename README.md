@@ -22,39 +22,15 @@
 ~~~text
 1、先要运行 
     etcd
+2、启动Redis
+    redis-server
 2、启动相应的RPC服务
     go run user.go -f etc/user.yaml
-
+    。。。。。
 ~~~
 
-## 数据库设计
-
-- comment 评论表
-    - 用户编号
-    - 视频编号
-    - 评论内容
-- user 用户信息表
-    - 用户
-    - 密码
-    - 关注数
-    - 粉丝数
-    - 点赞数
-    - 用户编号
-- video 视频信息表
-    - 视频标题
-    - 视频地址
-    - 视频封面
-    - 视频点赞数
-    - 视频评论数
-    - 文件名
-    - 文件标签类
-    - 视频编号
-- userfocuson 用户关注表
-    - 关注者编号
-    - 被关注者编号
-- userlikevideo 用户点赞表
-    - 用户编号
-    - 视频编号
-- userpublishvideo 用户上传表
-    - 用户编号
-    - 视频编号
+~~~text
+快速启动
+    ./start.sh
+    go run douyin.go -f etc/douyin.yaml
+~~~
