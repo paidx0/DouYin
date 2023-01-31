@@ -26,3 +26,16 @@ CommentRpc:
     Hosts:
       - 127.0.0.1:2379
     Key: comment.rpc
+
+FeedRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: feed.rpc
+
+RelationRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: relation.rpc
+

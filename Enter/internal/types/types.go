@@ -2,7 +2,7 @@
 package types
 
 type FeedReq struct {
-	LatestTime int64  `form:"latest_time,optional"` // 可选参数，限制返回视频的最新投稿时间戳
+	LatestTime string `form:"latest_time,optional"` // 可选参数，限制返回视频的最新投稿时间戳
 	Token      string `form:"token,optional"`       // 可选参数，登录用户设置
 }
 

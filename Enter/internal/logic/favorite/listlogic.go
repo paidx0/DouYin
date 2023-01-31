@@ -7,7 +7,6 @@ import (
 	"DouYin/server/favorite/rpc/favoriterpc"
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
-	"log"
 )
 
 type ListLogic struct {
@@ -38,7 +37,7 @@ func (l *ListLogic) List(req *types.FavoriteListReq) (resp *types.FavoriteListRe
 		return
 	}
 
-	videoList := make([]types.Video, listResp.Cnt, 2*listResp.Cnt)
+	videoList := make([]types.Video, 0, listResp.Cnt)
 	for _, video := range listResp.VideoList {
 		videoList = append(videoList, types.Video{
 			Id: video.Vid,
@@ -57,12 +56,11 @@ func (l *ListLogic) List(req *types.FavoriteListReq) (resp *types.FavoriteListRe
 			Title:         video.Title,
 		})
 	}
-	log.Println(videoList)
 
 	resp = &types.FavoriteListResp{
 		StatusCode: global.Success,
 		StatusMsg:  "操作成功",
-		VideoList:  videoList[listResp.Cnt:],
+		VideoList:  videoList,
 	}
 	return
 }

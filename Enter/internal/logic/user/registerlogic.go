@@ -27,21 +27,16 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.Req) (resp *types.Resp, err error) {
-	// 用户名、密码最长32字符
-	if req.Username == "" || req.Password == "" {
+	// 检查用户名或密码的格式
+	err = utils.CheckUserLayout(req.Username, req.Password)
+	if err != nil {
 		resp = &types.Resp{
 			StatusCode: global.Error,
-			StatusMsg:  "用户名和密码不能为空",
+			StatusMsg:  err.Error(),
 		}
 		return
 	}
-	if len(req.Username) > 32 || len(req.Password) > 32 {
-		resp = &types.Resp{
-			StatusCode: global.Error,
-			StatusMsg:  "用户名和密码最长32个字符",
-		}
-		return
-	}
+
 	// 检查用户名唯一性
 	count, err := global.DBEngine.Where("username = ?", req.Username).Count(&models.User{})
 	if err != nil {

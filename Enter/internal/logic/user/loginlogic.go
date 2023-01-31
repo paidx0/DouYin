@@ -26,7 +26,17 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.Req) (resp *types.Resp, err error) {
-	// 交给UserPrc
+	// 检查用户名或密码的格式
+	err = utils.CheckUserLayout(req.Username, req.Password)
+	if err != nil {
+		resp = &types.Resp{
+			StatusCode: global.Error,
+			StatusMsg:  err.Error(),
+		}
+		return
+	}
+
+	// 交给UserPrc处理
 	login, err := l.svcCtx.UserRpc.Login(l.ctx, &userrpc.Req{
 		Username: req.Username,
 		Password: utils.Md5(req.Password),

@@ -1,6 +1,8 @@
 package relation
 
 import (
+	"DouYin/global"
+	"DouYin/server/relation/rpc/relationrpc"
 	"context"
 
 	"DouYin/Enter/internal/svc"
@@ -24,7 +26,34 @@ func NewFollowerlistLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Foll
 }
 
 func (l *FollowerlistLogic) Followerlist(req *types.ListReq) (resp *types.ListResp, err error) {
-	// todo: add your logic here and delete this line
+	// 交给RelationRpc处理
+	listResp, err := l.svcCtx.RelationRpc.FollowerList(l.ctx, &relationrpc.ListReq{
+		UserId: req.UserID,
+		Token:  req.Token,
+	})
+	if err != nil || listResp.StatusCode != 0 {
+		resp = &types.ListResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}
+		return
+	}
 
+	userList := make([]types.User, 0, listResp.Cnt)
+	for _, user := range listResp.UserList {
+		userList = append(userList, types.User{
+			Id:            user.Uid,
+			Username:      user.Username,
+			FollowCount:   user.FollowCount,
+			FollowerCount: user.FollowerCount,
+			IsFollow:      user.IsFollow,
+		})
+	}
+
+	resp = &types.ListResp{
+		StatusCode: global.Success,
+		StatusMsg:  "操作成功",
+		UserList:   userList,
+	}
 	return
 }

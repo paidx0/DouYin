@@ -13,4 +13,6 @@ type Config struct {
 	FavoriteRpc zrpc.RpcClientConf
 	PublishRpc  zrpc.RpcClientConf
 	CommentRpc  zrpc.RpcClientConf
+	FeedRpc     zrpc.RpcClientConf
+	RelationRpc zrpc.RpcClientConf
 }

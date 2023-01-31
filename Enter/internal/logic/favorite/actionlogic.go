@@ -31,17 +31,17 @@ func (l *ActionLogic) Action(req *types.FavoriteActionReq) (resp *types.Favorite
 		VideoId:    req.VideoID,
 		ActionType: req.ActionType,
 	})
-
 	if err != nil || actionResp.StatusCode != 0 {
 		resp = &types.FavoriteActionResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",
 		}
-	} else {
-		resp = &types.FavoriteActionResp{
-			StatusCode: global.Success,
-			StatusMsg:  "操作成功",
-		}
+		return
+	}
+
+	resp = &types.FavoriteActionResp{
+		StatusCode: global.Success,
+		StatusMsg:  "操作成功",
 	}
 	return
 }

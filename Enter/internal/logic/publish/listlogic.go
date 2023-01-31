@@ -38,7 +38,7 @@ func (l *ListLogic) List(req *types.PublishListReq) (resp *types.PublishListResp
 		return
 	}
 
-	videoList := make([]types.Video, listResp.Cnt, 2*listResp.Cnt)
+	videoList := make([]types.Video, 0, listResp.Cnt)
 	for _, video := range listResp.VideoList {
 		videoList = append(videoList, types.Video{
 			Id: video.Vid,
@@ -61,7 +61,7 @@ func (l *ListLogic) List(req *types.PublishListReq) (resp *types.PublishListResp
 	resp = &types.PublishListResp{
 		StatusCode: global.Success,
 		StatusMsg:  "操作成功",
-		VideoList:  videoList[listResp.Cnt:],
+		VideoList:  videoList,
 	}
 	return
 }

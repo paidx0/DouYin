@@ -25,6 +25,11 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
+	// 数据最大 500MB
+	// 超时时间 50000
+	c.RestConf.MaxBytes = 524288000
+	c.RestConf.Timeout = 50000
+
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 

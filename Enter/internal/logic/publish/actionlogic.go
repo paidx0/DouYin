@@ -7,7 +7,9 @@ import (
 	"context"
 	"errors"
 	"go.uber.org/zap"
+	"io"
 	"mime/multipart"
+	"os"
 	"path"
 
 	"DouYin/Enter/internal/svc"
@@ -56,7 +58,45 @@ func (l *ActionLogic) Action(req *types.PublishActionReq, file multipart.File, f
 		}, nil
 	}
 
-	fileUrl, err := utils.ResumeUpload(file, fileHeader, filesize)
+	// 视频临时保存到本地
+	tempVideo := "./tempdir/" + fileHeader.Filename
+
+	out, err := os.Create(tempVideo)
+	if err != nil {
+		return &types.PublishActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}, err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, file)
+	if err != nil {
+		return &types.PublishActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}, err
+	}
+
+	// 截取封面图第5帧
+	err = utils.GetSnapshot(tempVideo, 5)
+	if err != nil {
+		return &types.PublishActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}, err
+	}
+
+	// 上传封面文件
+	pngUrl, err := utils.TempUpload(tempVideo+".png", fileHeader.Filename+".png")
+	if err != nil {
+		return &types.PublishActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}, nil
+	}
+	// 上传视频文件
+	videoUrl, err := utils.TempUpload(tempVideo, fileHeader.Filename)
 	if err != nil {
 		return &types.PublishActionResp{
 			StatusCode: global.Error,
@@ -68,8 +108,8 @@ func (l *ActionLogic) Action(req *types.PublishActionReq, file multipart.File, f
 	uuid := utils.UUID()
 	video := &models.Video{
 		Title:    req.Title,
-		PlayUrl:  fileUrl,
-		CoverUrl: "",
+		PlayUrl:  videoUrl,
+		CoverUrl: pngUrl,
 		Name:     fileHeader.Filename,
 		Tag:      path.Ext(fileHeader.Filename),
 		VideoKey: uuid,
@@ -79,15 +119,35 @@ func (l *ActionLogic) Action(req *types.PublishActionReq, file multipart.File, f
 		VideoKey: uuid,
 	}
 
-	_, err = global.DBEngine.Insert(video)
-	_, err = global.DBEngine.Insert(userpulishvideo)
+	// 开启事务
+	session := global.DBEngine.NewSession()
+	defer session.Close()
+	session.Begin()
+
+	_, err = session.Insert(video)
+	_, err = session.Insert(userpulishvideo)
 	if err != nil {
 		global.ZAP.Error("数据库插入失败", zap.Error(err))
+		session.Rollback()
 		return &types.PublishActionResp{
 			StatusCode: global.Error,
 			StatusMsg:  "操作失败",
 		}, err
 	}
+
+	// 最后提交事务
+	err = session.Commit()
+	if err != nil {
+		global.ZAP.Error("事务提交失败", zap.Error(err))
+		return &types.PublishActionResp{
+			StatusCode: global.Error,
+			StatusMsg:  "操作失败",
+		}, err
+	}
+
+	// 最后删除掉临时文件
+	os.Remove(tempVideo)
+	os.Remove(tempVideo + ".png")
 
 	resp = &types.PublishActionResp{
 		StatusCode: global.Success,

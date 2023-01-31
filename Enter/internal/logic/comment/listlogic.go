@@ -38,7 +38,7 @@ func (l *ListLogic) List(req *types.CommentListReq) (resp *types.CommentListResp
 		return
 	}
 
-	commentList := make([]types.Comment, listResp.Cnt, 2*listResp.Cnt)
+	commentList := make([]types.Comment, 0, listResp.Cnt)
 	for _, comment := range listResp.CommentList {
 		date, _ := time.Parse(global.DateTimeFmt, comment.CreatedAt)
 		commentList = append(commentList, types.Comment{
@@ -58,7 +58,7 @@ func (l *ListLogic) List(req *types.CommentListReq) (resp *types.CommentListResp
 	resp = &types.CommentListResp{
 		StatusCode:  global.Success,
 		StatusMsg:   "操作成功",
-		CommentList: commentList[listResp.Cnt:],
+		CommentList: commentList,
 	}
 	return
 }
