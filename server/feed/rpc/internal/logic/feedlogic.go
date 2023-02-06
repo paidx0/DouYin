@@ -32,7 +32,7 @@ func (l *FeedLogic) Feed(in *__.FeedReq) (*__.FeedResp, error) {
 	// 返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
 	// 以时间戳为基准逆序返回最新的视频，并以最后一个的时间作为下一次的刷新基准
 	var curtime string
-	if in.LatestTime == "" {
+	if in.LatestTime == "0" || in.LatestTime == "" {
 		curtime = time.Now().Format(global.DateTimeFmt)
 	} else {
 		parseInt, _ := strconv.ParseInt(in.LatestTime, 10, 64)
@@ -54,6 +54,8 @@ func (l *FeedLogic) Feed(in *__.FeedReq) (*__.FeedResp, error) {
 
 	// 返回视频单次最多30个
 	videoList := make([]*__.Video, 0, 30)
+
+	global.DBEngine.ShowSQL(true)
 
 	// 返回视频列表：包括视频信息、发布者信息、及我是否点赞过这个视频、我是否关注这个作者(前提是我已经登录)，每次返回30个
 	err = global.DBEngine.Table("video").Where("video.updated_at < ?", curtime).Desc("video.updated_at").Limit(30).
