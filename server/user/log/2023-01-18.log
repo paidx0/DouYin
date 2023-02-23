@@ -1,4 +1,0 @@
-2023/01/18 - 16:28:47	error	/Users/paidx0/GolandProjects/DouYin/server/user/rpc/internal/logic/userinfologic.go:55	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'userkey' in 'where clause'"}
-2023/01/18 - 16:32:24	error	/Users/paidx0/GolandProjects/DouYin/server/user/rpc/internal/logic/userinfologic.go:55	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'userkey' in 'where clause'"}
-2023/01/18 - 16:32:25	error	/Users/paidx0/GolandProjects/DouYin/server/user/rpc/internal/logic/userinfologic.go:55	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'userkey' in 'where clause'"}
-2023/01/18 - 16:32:50	error	/Users/paidx0/GolandProjects/DouYin/server/user/rpc/internal/logic/userinfologic.go:55	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'userkey' in 'where clause'"}

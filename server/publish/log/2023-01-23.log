@@ -1,3 +1,0 @@
-2023/01/23 - 15:48:09	warn	/Users/paidx0/GolandProjects/DouYin/global/init.go:66	viper初始化失败	{"error": "1 error(s) decoding:\n\n* 'qiniu' expected a map, got 'string'"}
-2023/01/23 - 20:47:59	error	/Users/paidx0/GolandProjects/DouYin的副本/server/publish/rpc/internal/logic/publishlistlogic.go:73	数据库查询失败	{"error": "Error 1052 (23000): Column 'deleted_at' in where clause is ambiguous"}
-2023/01/23 - 21:35:47	error	/Users/paidx0/GolandProjects/DouYin的副本/server/publish/rpc/internal/logic/publishlistlogic.go:76	数据库查询失败	{"error": "Error 1054 (42S22): Unknown column 'userlikevideo.video_key' in 'on clause'"}

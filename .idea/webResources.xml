@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebResourcesPaths">
+    <contentEntries>
+      <entry url="file://$PROJECT_DIR$">
+        <entryData>
+          <resourceRoots>
+            <path value="file://$PROJECT_DIR$/server/comment" />
+            <path value="file://$PROJECT_DIR$/server/favorite" />
+            <path value="file://$PROJECT_DIR$/server/feed" />
+            <path value="file://$PROJECT_DIR$/server/publish" />
+            <path value="file://$PROJECT_DIR$/server/relation" />
+            <path value="file://$PROJECT_DIR$/server/user" />
+          </resourceRoots>
+        </entryData>
+      </entry>
+    </contentEntries>
+  </component>
+</project>

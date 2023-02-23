@@ -15,7 +15,7 @@ mysql:
   path: 'localhost:3306'
   dbname: 'DouYin'
   dbuser: 'root'
-  dbpasswd: 'hyh1203+'
+  dbpasswd: 'root'
 
 # Zap 配置
 zap:
@@ -25,6 +25,6 @@ zap:
 qiniu:
   access-key: 'KBCIhrKkTFFQo1nEIRh3Olrf1T8EkCYpwpCvkuED'
   secret-key: '2H_x0uDJmAmCub4aXrMoyNJaYpWs_sEjDvbeVHPq'
-  bucket: 'doyin-paidx0'
-  qiniu-server: 'http://rorwnk4kz.hn-bkt.clouddn.com/'
+  bucket: 'douyin-paidx0'
+  qiniu-server: 'http://rqhhp7lsu.hn-bkt.clouddn.com/'
   path: 'uploads/'
