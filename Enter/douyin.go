@@ -1,12 +1,13 @@
 package main
 
 import (
-	"DouYin/Enter/internal/middleware"
 	"flag"
 	"fmt"
 	"math"
 	"net/http"
 	"time"
+
+	"DouYin/Enter/internal/middleware"
 
 	"DouYin/Enter/internal/config"
 	"DouYin/Enter/internal/handler"
@@ -17,7 +18,9 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/douyin-api.yaml", "the global file")
+var (
+	configFile = flag.String("f", "etc/douyin-api.yaml", "the global file")
+)
 
 func main() {
 	flag.Parse()

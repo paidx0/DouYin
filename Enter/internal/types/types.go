@@ -33,10 +33,10 @@ type User struct {
 }
 
 type Comment struct {
-	Id         int64  `json:"id" form:"id"`                   //评论id
-	User       User   `json:"user" form:"user"`               //评论用户信息
-	Content    string `json:"content" form:"content"`         //评论内容
-	CreateDate string `json:"create_date" form:"create_date"` //评论发布日期，格式 mm-dd
+	Id         int64  `json:"id" form:"id"`                   // 评论id
+	User       User   `json:"user" form:"user"`               // 评论用户信息
+	Content    string `json:"content" form:"content"`         // 评论内容
+	CreateDate string `json:"create_date" form:"create_date"` // 评论发布日期，格式 mm-dd
 }
 
 type Req struct {

@@ -1,11 +1,12 @@
 package middleware
 
 import (
+	"net/http"
+	"strings"
+
 	"DouYin/global"
 	"github.com/zeromicro/go-zero/core/jsonx"
 	"go.uber.org/zap"
-	"net/http"
-	"strings"
 )
 
 // Logger 全局日志中间件
@@ -21,7 +22,7 @@ func Logger(spendTime string, r *http.Request, datasize string, form map[string]
 	marshal, _ := jsonx.Marshal(formV)
 	global.ZAP.Info(path,
 		zap.String("Method:", method),
-		//zap.String("Status:", status),
+		// zap.String("Status:", status),
 		zap.String("SpendTime", spendTime),
 		zap.String("Ip:", ip),
 		zap.String("Host:", host),
