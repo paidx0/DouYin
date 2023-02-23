@@ -1,13 +1,14 @@
 package utils
 
 import (
-	"DouYin/global"
 	"bytes"
 	"fmt"
+	"os"
+
+	"DouYin/global"
 	"github.com/disintegration/imaging"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"go.uber.org/zap"
-	"os"
 )
 
 // todo 截取视频的某一帧作为视频封面

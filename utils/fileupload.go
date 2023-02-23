@@ -1,14 +1,15 @@
 package utils
 
 import (
-	"DouYin/global"
 	"context"
-	"github.com/qiniu/go-sdk/v7/auth/qbox"
-	"github.com/qiniu/go-sdk/v7/storage"
-	"go.uber.org/zap"
 	"mime/multipart"
 	"strconv"
 	"time"
+
+	"DouYin/global"
+	"github.com/qiniu/go-sdk/v7/auth/qbox"
+	"github.com/qiniu/go-sdk/v7/storage"
+	"go.uber.org/zap"
 )
 
 // todo 视频上传到七牛云

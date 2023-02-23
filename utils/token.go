@@ -1,11 +1,12 @@
 package utils
 
 import (
-	"DouYin/global"
 	"context"
 	"errors"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"DouYin/global"
+	"github.com/dgrijalva/jwt-go"
 )
 
 type UserClaim struct {
