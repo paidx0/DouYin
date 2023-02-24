@@ -1,4 +1,4 @@
-# 抖音极简版
+# 字节青训营第五期后端-抖音极简版
 
 ### 👉 [点我去看文档](https://gxlsv6zp0c.feishu.cn/docx/UvErd0aYno8w05xYyVec0xOvnnc) 👈
 ### 🧚‍♂️😝 演示视频 😝🧚‍♂️
